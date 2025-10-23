@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>破译“红色密码”—EPO兴奋剂的科学真相与青少年运动员的抉择</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #000; /* Changed background for contrast */
+      font-family: "Comic Sans MS", "Arial Rounded MT Bold", cursive; /* Keeping original font for now, can be changed */
+    }
+    video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+    /* Original Popup Styles (kept for reference/potential reuse) */
+    .popup-box {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 440px;
+      padding: 24px;
+      background: linear-gradient(to bottom, #fdfdfd, #fef2d8);
+      border: 6px solid #ff0000;
+      border-radius: 24px;
+      box-shadow: 0 0 12px 6px rgba(0,0,0,0.25), inset 0 0 6px #000;
+      z-index: 10;
+      animation: pop-in 0.4s ease-out;
+      text-align: center;
+    }
+    .popup-box h2 {
+      font-size: 22px;
+      color: #0033cc;
+      text-shadow: 2px 2px #fff;
+    }
+    .popup-box button {
+      margin-top: 15px;
+      padding: 12px 24px;
+      background-color: #ffcc00;
+      border: 3px solid #000;
+      border-radius: 16px;
+      color: #000;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px #cc9900;
+    }
+    .popup-box button:hover {
+      background-color: #ffdd44;
+      transform: scale(1.05);
+    }
+    .quiz-box button {
+      display: block;
+      margin: 10px auto;
+      width: 80%;
+    }
+    #feedback {
+      margin-top: 12px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    @keyframes pop-in {
+      from {
+        opacity: 0;
+        transform: scale(0.7) translateX(-50%);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateX(-50%);
+      }
+    }
+    .confetti {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      background-color: #ffcc00;
+      top: -20px;
+      animation: fall 3s linear infinite;
+      z-index: 999;
+      border-radius: 50%;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    #qr-container {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 0;
+      border: 6px solid #0033cc;
+      border-radius: 20px;
+      text-align: center;
+      z-index: 999;
+    }
+
+    #qr-container img {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    #qr-download {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #ff3333;
+      color: white;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      border: 2px solid #000;
+      margin-top: 10px;
+    }
+
+    #qr-download:hover {
+      background: #ff6666;
+    }
+
+    #qr-container button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      background: #0033cc;
+      color: white;
+      border-radius: 10px;
+      border: 2px solid #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #qr-container button:hover {
+      background: #0055ff;
+    }
+
+    /* New Blackboard Popup Styles */
+    .blackboard-popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black overlay */
+        z-index: 20;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #FFF; /* White text */
+        font-family: inherit; /* Use the same font */
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .blackboard {
+        background-color: #000; /* Black background for blackboard */
+        border: 10px solid #ff0000; /* Red border */
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px 5px #ff0000; /* Red glow effect */
+        width: 80%;
+        max-width: 700px;
+        position: relative; /* For character positioning */
+        animation: pop-in 0.5s ease-out;
+    }
+
+    .blackboard-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #ffff00; /* Yellow title */
+        margin-bottom: 20px;
+        text-shadow: 2px 2px #ff0000; /* Red shadow */
+    }
+
+    .blackboard-content {
+        font-size: 18px;
+        line-height: 1.6;
+        text-align: left;
+        margin-bottom: 30px;
+        color: #FFF; /* White text */
+    }
+    .blackboard-content strong {
+        display: block;
+        text-align: center;
+        font-weight: bold;
+        color: #ffff00; /* Yellow for emphasized text */
+        margin-bottom: 10px;
+    }
+
+    .blackboard-button {
+        padding: 15px 30px;
+        background-color: #ffff00; /* Yellow button */
+        color: #000; /* Black text */
+        border: 3px solid #ff0000; /* Red border */
+        border-radius: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 5px #ff0000; /* Red shadow */
+    }
+
+    .blackboard-button:hover {
+        background-color: #fff;
+        color: #ff0000;
+        transform: translateY(-2px);
+        box-shadow: 0 7px #ff0000;
+    }
+
+    /* Animated Character Styles */
+    .animated-character {
+        position: absolute;
+        bottom: 20px; /* Adjusted position */
+        right: 20px; /* Adjust as needed */
+        width: 100px; /* Adjusted size */
+        height: 150px; /* Adjusted size */
+        background-image: url('anime-character.png'); /* Using the anime character image */
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        border: none; /* Removed border */
+        animation: character-bob 2s ease-in-out infinite; /* Kept animation */
+    }
+
+    /* Simple Bobbing Animation */
+    @keyframes character-bob {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px); /* Adjust bob height */
+        }
+    }
+
+    /* Quiz Styles */
+    .quiz-container {
+        max-height: 70vh;
+        overflow-y: auto;
+        padding-right: 15px; /* For scrollbar */
+    }
+    .quiz-question-box {
+        background-color: #1a1a1a; /* Darker background for each question */
+        border: 2px solid #ffff00; /* Yellow border */
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        text-align: left;
+    }
+    .quiz-question-box p {
+        margin-bottom: 15px;
+        font-size: 18px;
+    }
+    .quiz-option {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        background-color: #ff0000; /* Red options */
+        color: #fff; /* White text */
+        border: 2px solid #ffff00; /* Yellow border */
+        border-radius: 8px;
+        text-align: left;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .quiz-option:hover {
+        background-color: #cc0000; /* Darker red on hover */
+    }
+    .quiz-feedback {
+        margin-top: 15px;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .correct {
+        color: #00ff00; /* Green for correct */
+    }
+    .incorrect {
+        color: #ff0000; /* Red for incorrect */
+    }
+    .quiz-navigation {
+        margin-top: 15px;
+        color: #ffff00; /* Yellow text */
+    }
+
+    /* Celebration Effect */
+    #celebration {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.7);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        flex-direction: column;
+    }
+    #celebration h2 {
+        color: #ffff00;
+        font-size: 3em;
+        text-shadow: 3px 3px #ff0000;
+        animation: celebration-text 1s ease-in-out infinite alternate;
+    }
+    @keyframes celebration-text {
+        from { transform: scale(1); }
+        to { transform: scale(1.1); }
+    }
+
+  </style>
+</head>
+<body>
+
+<video id="video" controls>
+  <!-- Ensure the video file path is correct -->
+  <source src="破译红色密码EPO.mp4" type="video/mp4" />
+  你的浏览器不支持 video 标签。
+</video>
+
+<!-- Original Popups (can be removed if not needed) -->
+<div id="popup" class="popup-box">
+  <h2>点击揭开EPO真相！</h2>
+  <button onclick="closePopup()">开始吧！</button>
+</div>
+<div id="quiz" class="popup-box quiz-box">
+  <h2>关于EPO（促红细胞生成素）的描述，以下说法正确的是：</h2>
+  <button onclick="checkAnswer('A')">A. EPO是一种合法的运动辅助药物，可以安全地用于提高运动表现。</button>
+  <button onclick="checkAnswer('B')">B. EPO能够刺激骨髓制造更多的红细胞，从而增加血液的携氧能力。</button>
+  <button onclick="checkAnswer('C')">C. 使用EPO不会对身体造成任何副作用，是一种理想的耐力增强剂。</button>
+  <button onclick="checkAnswer('D')">D. EPO的使用对运动员来说只有好处，没有坏处。</button>
+  <p id="feedback"></p>
+</div>
+<div id="finalPopup" class="popup-box">
+  <h2>拒绝红色诱惑，坚守公平信仰</h2>
+  <button onclick="showCommitment()">我承诺！</button>
+</div>
+<div id="commitmentPopup" class="popup-box">
+  <h2>已成功签署电子承诺书</h2>
+  <button onclick="closeCommitment()">点击加入“Say No 行动”！</button>
+</div>
+<div id="qr-container">
+  <h2>恭喜你获得「反EPO徽章」！</h2>
+  <img src="badge-image(1).png" alt="扫描领取徽章">
+  <a id="qr-download" href="badge-image.png" download="反EPO徽章.png">📥 扫码领取或点击下载徽章</a>
+  <button onclick="closeQr()">返回视频</button>
+</div>
+
+<!-- New Blackboard Popups -->
+<div id="knowledgePopup1" class="blackboard-popup">
+  <div class="blackboard">
+    <h2 class="blackboard-title">《EPO的科学真相》</h2>
+    <div class="blackboard-content" data-speech="知识点一：EPO的“个人名片”。促红细胞生成素（EPO）又称红细胞刺激因子、促红素，是一种人体内源性糖蛋白激素，可刺激红细胞生成。">
+      <strong>知识点一：EPO的“个人名片”</strong>
+      促红细胞生成素（EPO）又称红细胞刺激因子、促红素，是一种人体内源性糖蛋白激素，可刺激红细胞生成。
+    </div>
+    <div class="animated-character"></div>
+    <button class="blackboard-button" onclick="closeKnowledgePopup('knowledgePopup1')">已Get！继续播放</button>
+  </div>
+</div>
+
+<div id="knowledgePopup2" class="blackboard-popup">
+  <div class="blackboard">
+    <h2 class="blackboard-title">《EPO的科学真相》</h2>
+    <div class="blackboard-content" data-speech="知识点二：EPO的作用机理。EPO主要通过与红系祖细胞表面的特异性受体“锁钥结合”来发挥其生物活性。">
+      <strong>知识点二：EPO的作用机理</strong>
+      EPO主要通过与红系祖细胞表面的特异性受体“锁钥结合”来发挥其生物活性。
+    </div>
+    <div class="animated-character"></div>
+    <button class="blackboard-button" onclick="closeKnowledgePopup('knowledgePopup2')">已Get！继续播放</button>
+  </div>
+</div>
+
+<div id="knowledgePopup3" class="blackboard-popup">
+  <div class="blackboard">
+    <h2 class="blackboard-title">《EPO的科学真相》</h2>
+    <div class="blackboard-content" data-speech="知识点三：EPO滥用的代价。EPO滥用会导致严重的健康风险，包括血液红细胞过多，血压过高，心脏病、中风等一系列无法挽回的后果。">
+      <strong>知识点三：EPO滥用的代价</strong>
+      EPO滥用会导致严重的健康风险，包括血液红细胞过多，血压过高，心脏病、中风等一系列无法挽回的后果。
+    </div>
+    <div class="animated-character"></div>
+    <button class="blackboard-button" onclick="closeKnowledgePopup('knowledgePopup3')">已Get！继续播放</button>
+  </div>
+</div>
+
+<div id="summaryPopup" class="blackboard-popup">
+  <div class="blackboard">
+    <h2 class="blackboard-title">《课堂小结》</h2>
+    <div class="blackboard-content" data-speech="课堂小结。知识点一、EPO的“个人名片”：促红细胞生成素（EPO）又称红细胞刺激因子、促红素，是一种人体内源性糖蛋白激素，可刺激红细胞生成。知识点二、EPO的作用机理：EPO主要通过与红系祖细胞表面的特异性受体“锁钥结合”来发挥其生物活性。知识点三、EPO滥用的代价：EPO滥用会导致严重的健康风险，包括血液红细胞过多，血压过高，心脏病、中风等一系列无法挽回的后果。">
+      <strong>知识点一、EPO的“个人名片”：</strong>促红细胞生成素（EPO）又称红细胞刺激因子、促红素，是一种人体内源性糖蛋白激素，可刺激红细胞生成。<br><br>
+      <strong>知识点二、EPO的作用机理：</strong>EPO主要通过与红系祖细胞表面的特异性受体“锁钥结合”来发挥其生物活性。<br><br>
+      <strong>知识点三、EPO滥用的代价：</strong>EPO滥用会导致严重的健康风险，包括血液红细胞过多，血压过高，心脏病、中风等一系列无法挽回的后果。
+    </div>
+    <div class="animated-character"></div>
+    <button class="blackboard-button" onclick="closeKnowledgePopup('summaryPopup')">已Get全部课堂知识点！继续播放</button>
+  </div>
+</div>
+
+<!-- New Quiz Popup -->
+<div id="finalQuizPopup" class="blackboard-popup">
+  <div class="blackboard">
+    <h2 class="blackboard-title">课堂练习</h2>
+    <div class="quiz-container" id="quizContainer">
+      <!-- Quiz questions will be loaded here by JavaScript -->
+    </div>
+    <button class="blackboard-button" id="quizCloseButton" style="display: none;" onclick="closeKnowledgePopup('finalQuizPopup')">完成练习！继续观看</button>
+  </div>
+</div>
+
+<!-- Celebration Effect -->
+<div id="celebration">
+    <h2>恭喜你！！！</h2>
+    <p style="color: white; font-size: 1.5em;">你已完成全部课堂内容和习题！</p>
+</div>
+
+<script>
+  const video = document.getElementById("video");
+  // Original popup elements
+  const popup = document.getElementById("popup");
+  const quiz = document.getElementById("quiz");
+  const finalPopup = document.getElementById("finalPopup");
+  const commitmentPopup = document.getElementById("commitmentPopup");
+  const feedback = document.getElementById("feedback");
+  const qrContainer = document.getElementById("qr-container");
+  const qrDownload = document.getElementById("qr-download");
+
+  // New popup elements
+  const knowledgePopup1 = document.getElementById("knowledgePopup1");
+  const knowledgePopup2 = document.getElementById("knowledgePopup2");
+  const knowledgePopup3 = document.getElementById("knowledgePopup3");
+  const summaryPopup = document.getElementById("summaryPopup");
+  const finalQuizPopup = document.getElementById("finalQuizPopup");
+  const quizContainer = document.getElementById("quizContainer");
+  const quizCloseButton = document.getElementById("quizCloseButton");
+  const celebrationEffect = document.getElementById("celebration");
+
+  // Tracking variables for original popups
+  let popupShown = false;
+  let quizShown = false;
+  let finalPopupShown = false;
+  let firstQRTriggered = false;
+  let hasInteractedWithQR = false;
+  let lastVideoTime = 0;
+
+  // Tracking variables for new popups
+  let knowledgePopup1Shown = false;
+  let knowledgePopup2Shown = false;
+  let knowledgePopup3Shown = false;
+  let summaryPopupShown = false;
+  let finalQuizPopupShown = false;
+
+  // --- Speech Synthesis Setup ---
+  const synth = window.speechSynthesis;
+  let voices = [];
+  let speechUtterance = null; // To hold the current utterance
+
+  function populateVoiceList() {
+    if(typeof speechSynthesis === 'undefined') {
+      console.warn('Speech Synthesis not supported');
+      return;
+    }
+    voices = synth.getVoices().filter(voice => voice.lang.startsWith('zh'));
+    // console.log(voices); // Optional: Log available Chinese voices
+  }
+
+  populateVoiceList();
+  if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = populateVoiceList;
+  }
+
+  // --- Quiz Data --- 
+  const quizData = [
+    {
+      type: 'choice',
+      question: '关于EPO（促红细胞生成素）的描述，以下说法正确的是：',
+      options: [
+        'A. EPO是一种合法的运动辅助药物，可以安全地用于提高运动表现。',
+        'B. EPO能够刺激骨髓制造更多的红细胞，从而增加血液的携氧能力。',
+        'C. 使用EPO不会对身体造成任何副作用，是一种理想的耐力增强剂。',
+        'D. EPO的使用对运动员来说只有好处，没有坏处。'
+      ],
+      answer: 'B',
+      explanation: 'B选项正确描述了EPO的主要生理功能。A选项错误，EPO属于兴奋剂，是被禁止的；C和D选项错误，滥用EPO有严重的健康风险。'
+    },
+    {
+      type: 'choice',
+      question: 'EPO的别名不包括：',
+      options: [
+        'A. 促红素',
+        'B. 红细胞刺激因子',
+        'C. 生长激素',
+        'D. 促红细胞生成素'
+      ],
+      answer: 'C',
+      explanation: '根据知识点一，EPO的别名包括红细胞刺激因子和促红素，生长激素不是EPO的别名。'
+    },
+    {
+      type: 'choice',
+      question: 'EPO滥用可能导致的后果有：',
+      options: [
+        'A. 血压过高和心脏病',
+        'B. 贫血和低血压',
+        'C. 食欲不振',
+        'D. 视力下降'
+      ],
+      answer: 'A',
+      explanation: '根据知识点三，EPO滥用会导致血压过高和心脏病等严重后果。'
+    },
+    {
+      type: 'true_false',
+      question: 'EPO通过"锁钥结合"的方式与红系祖细胞表面的特异性受体结合来发挥作用。',
+      answer: true,
+      explanation: '根据知识点二，EPO确实是通过与红系祖细胞表面的特异性受体"锁钥结合"来发挥其生物活性。'
+    },
+    {
+      type: 'true_false',
+      question: 'EPO滥用对人体没有任何危害。',
+      answer: false,
+      explanation: '根据知识点三，EPO滥用会导致多种严重的健康风险，包括血液红细胞过多、血压过高、心脏病和中风等。'
+    }
+  ];
+
+  let currentQuestionIndex = 0;
+  let quizCompleted = false;
+
+  // --- Event Listener for Video Time Updates ---
+  video.ontimeupdate = function () {
+    if (quizCompleted) return; // Stop checking time if quiz is done
+    const time = video.currentTime;
+
+    // Timestamps converted to seconds (MM:SS.ms -> seconds)
+    const timeKp1 = 14.25; // 00:14.25
+    const timeKp2 = 79.81; // 01:19.81
+    const timeKp3 = 100.62; // 01:40.62
+    const timeSummary = 123.57; // 02:03.57
+    const timeFinalQuiz = 195.21; // 03:15.21
+
+    // Original popup triggers (kept for now)
+    if (time >= 59.31 && !popupShown) { // 00:59.31
+      video.pause();
+      popup.style.display = 'block';
+      popupShown = true;
+    }
+    // 删除了01:49.54时间点的选择题交互弹窗
+    if (time >= 174.76 && !finalPopupShown) { // 02:54.76
+      video.pause();
+      finalPopup.style.display = 'block';
+      finalPopupShown = true;
+    }
+    if (time >= 182.41 && time < 183 && !hasInteractedWithQR && !firstQRTriggered) { // 03:02.41
+      showQr(false);
+      firstQRTriggered = true;
+    }
+
+    // New popup triggers
+    if (time >= timeKp1 && !knowledgePopup1Shown) {
+      showKnowledgePopup('knowledgePopup1');
+      knowledgePopup1Shown = true;
+    }
+    if (time >= timeKp2 && !knowledgePopup2Shown) {
+      showKnowledgePopup('knowledgePopup2');
+      knowledgePopup2Shown = true;
+    }
+    if (time >= timeKp3 && !knowledgePopup3Shown) {
+      showKnowledgePopup('knowledgePopup3');
+      knowledgePopup3Shown = true;
+    }
+    if (time >= timeSummary && !summaryPopupShown) {
+      showKnowledgePopup('summaryPopup');
+      summaryPopupShown = true;
+    }
+    // 最终测验弹窗不再使用固定时间点触发，而是在关闭课堂小结弹窗后触发
+  };
+
+  video.onended = function () {
+    if (!quizCompleted) {
+        // If video ends before quiz is triggered/completed, show quiz
+        showKnowledgePopup('finalQuizPopup');
+        if (!finalQuizPopupShown) {
+            loadQuizQuestion(currentQuestionIndex);
+            finalQuizPopupShown = true;
+        }
+    } else {
+        // Or show the original QR code if quiz is done
+        showQr(true);
+    }
+  };
+
+  // --- Functions for Original Popups ---
+  function closePopup() {
+    playClickSound(); // Add click sound
+    popup.style.display = 'none';
+    video.play();
+  }
+  function checkAnswer(answer) { // Original quiz logic
+    if (answer === 'B') {
+      feedback.textContent = 'BINGO！答对啦 🎉';
+      feedback.style.color = '#00aa00';
+      showConfetti();
+      setTimeout(() => {
+        quiz.style.display = 'none';
+        video.play();
+      }, 1500);
+    } else {
+      feedback.textContent = '错误！解析：' + getExplanation(answer);
+      feedback.style.color = 'red';
+    }
+  }
+  function getExplanation(answer) { // Original explanation logic
+    const explanations = {
+      'A': 'EPO属于兴奋剂，是被国际体育组织明令禁止的非法药物。',
+      'C': '使用EPO会导致严重的副作用，如血液浓稠、血栓形成等。',
+      'D': 'EPO的使用对运动员来说有严重的健康风险。'
+    };
+    return explanations[answer] || '';
+  }
+  function showCommitment() {
+    finalPopup.style.display = 'none';
+    commitmentPopup.style.display = 'block';
+  }
+  function closeCommitment() {
+    commitmentPopup.style.display = 'none';
+    video.play();
+  }
+  function showQr(showFull) {
+    qrContainer.style.display = 'block';
+    video.pause();
+    lastVideoTime = video.currentTime;
+    qrDownload.style.display = showFull ? 'inline-block' : 'none';
+  }
+  function closeQr() {
+    qrContainer.style.display = 'none';
+    hasInteractedWithQR = true;
+    video.currentTime = lastVideoTime;
+    video.play();
+  }
+  function showConfetti() { // Original confetti
+    for (let i = 0; i < 40; i++) {
+      const confetti = document.createElement('div');
+      confetti.classList.add('confetti');
+      confetti.style.left = Math.random() * 100 + 'vw';
+      confetti.style.backgroundColor = randomColor();
+      confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      document.body.appendChild(confetti);
+      setTimeout(() => confetti.remove(), 3000);
+    }
+  }
+  function randomColor() { // Original random color
+    const colors = ['#ffcc00', '#ff6666', '#66ccff', '#0033cc', '#ff0000'];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  // --- Sound Effect Functions ---
+  function playClickSound() {
+    const clickSound = new Audio("button_click.mp3");
+    clickSound.play();
+  }
+
+  function playNotificationSound() {
+    const notificationSound = new Audio("notification_popup.mp3");
+    notificationSound.play();
+  }
+
+  function playCorrectAnswerSound() { // New function for correct answer sound
+    const correctSound = new Audio("correct_answer_applause.mp3");
+    correctSound.play();
+  }
+
+  // --- Functions for New Popups ---
+  function showKnowledgePopup(popupId) {
+    const popupElement = document.getElementById(popupId);
+    if (popupElement) {
+      playNotificationSound(); // Play notification sound when popup appears
+      video.pause();
+      popupElement.style.display = "flex"; // Use flex for centering
+      
+      // Trigger speech synthesis for knowledge/summary popups
+      if (popupId.startsWith("knowledge") || popupId === "summaryPopup") {
+          const contentElement = popupElement.querySelector("[data-speech]");
+          if (contentElement) {
+              const textToSpeak = contentElement.getAttribute("data-speech");
+              // No callback needed here as we don't need to do anything after speech
+              speakText(textToSpeak);
+          }
+      }
+    }
+  }
+
+  function closeKnowledgePopup(popupId) {
+    playClickSound(); // Play click sound when closing
+    const popupElement = document.getElementById(popupId);
+    if (popupElement) {
+      popupElement.style.display = "none";
+      // Stop speech synthesis when closing popup
+      if (synth.speaking) {
+          synth.cancel();
+      }
+
+      // 如果关闭的是课堂小结弹窗，则显示最终测验弹窗
+      if (popupId === "summaryPopup" && !finalQuizPopupShown) {
+          setTimeout(() => {
+              showKnowledgePopup('finalQuizPopup'); // showKnowledgePopup already plays notification sound
+              loadQuizQuestion(currentQuestionIndex);
+              finalQuizPopupShown = true;
+          }, 500); // 短暂延迟后显示测验弹窗
+      } else if (!quizCompleted || popupId !== "finalQuizPopup") { // 其他情况下继续播放视频
+          video.play();
+      }
+    }
+  }
+
+  // --- Speech Synthesis Function ---
+  // Add callback parameter
+  function speakText(text, callback) {
+    if (synth.speaking) {
+        // console.log('SpeechSynthesis is busy, cancelling previous speech.');
+        synth.cancel(); // Cancel previous speech if any
+        // Use a small timeout to allow cancellation to complete before starting new speech
+        // Pass the callback to the new startSpeaking call
+        setTimeout(() => { startSpeaking(text, callback); }, 100);
+        return;
+    }
+    // Pass the callback to startSpeaking
+    startSpeaking(text, callback);
+  }
+
+  // Add callback parameter
+  function startSpeaking(text, callback) {
+    if (text !== "") {
+        speechUtterance = new SpeechSynthesisUtterance(text);
+        speechUtterance.onend = function (event) {
+            // console.log("SpeechSynthesisUtterance.onend");
+            speechUtterance = null; // Clear utterance when finished
+            // Execute the callback function if it exists
+            if (typeof callback === "function") {
+                callback();
+            }
+        }
+        speechUtterance.onerror = function (event) {
+            console.error("SpeechSynthesisUtterance.onerror", event);
+            speechUtterance = null;
+            // Optionally call callback even on error, or handle differently
+            // if (typeof callback === "function") {
+            //     callback(); 
+            // }
+        }
+        
+        // Try to find a suitable Chinese voice (preference for female/youthful if possible)
+        let selectedVoice = voices.find(voice => voice.lang === "zh-CN" && voice.name.includes("Xiaoyi")) || // Common youthful voice name
+                          voices.find(voice => voice.lang === "zh-CN" && voice.name.includes("Female")) ||
+                          voices.find(voice => voice.lang === "zh-CN") || // Any Chinese voice
+                          voices.find(voice => voice.lang.startsWith("zh")); // Any Chinese variant
+
+        if (selectedVoice) {
+            speechUtterance.voice = selectedVoice;
+            // console.log("Using voice:", selectedVoice.name);
+        } else {
+            console.warn("No suitable Chinese voice found, using default.");
+        }
+        
+        // Optional: Adjust pitch and rate
+        // speechUtterance.pitch = 1; 
+        // speechUtterance.rate = 1;
+
+        synth.speak(speechUtterance);
+    }
+  }
+
+
+  // --- Quiz Logic Functions ---
+  function loadQuizQuestion(index) {
+    if (index >= quizData.length) {
+      completeQuiz();
+      return;
+    }
+
+    const questionData = quizData[index];
+    quizContainer.innerHTML = ''; // Clear previous question
+
+    const questionBox = document.createElement('div');
+    questionBox.className = 'quiz-question-box';
+
+    const questionText = document.createElement('p');
+    questionText.textContent = `第 ${index + 1} 题: ${questionData.question}`;
+    questionBox.appendChild(questionText);
+
+    if (questionData.type === 'choice') {
+      questionData.options.forEach(optionText => {
+        const button = document.createElement('button');
+        button.className = 'quiz-option';
+        button.textContent = optionText;
+        const choice = optionText.split('')[0]; // Get A, B, C, or D
+        button.onclick = () => { playClickSound(); handleAnswer(choice, questionData.answer, questionData.explanation, questionBox); };
+        questionBox.appendChild(button);
+      });
+    } else if (questionData.type === 'true_false') {
+      const trueButton = document.createElement('button');
+      trueButton.className = 'quiz-option';
+      trueButton.textContent = '对';
+      trueButton.onclick = () => { playClickSound(); handleAnswer(true, questionData.answer, questionData.explanation, questionBox); };
+      questionBox.appendChild(trueButton);
+
+      const falseButton = document.createElement('button');
+      falseButton.className = 'quiz-option';
+      falseButton.textContent = '错';
+      falseButton.onclick = () => { playClickSound(); handleAnswer(false, questionData.answer, questionData.explanation, questionBox); };
+      questionBox.appendChild(falseButton);
+    }
+
+    const feedbackElement = document.createElement('p');
+    feedbackElement.className = 'quiz-feedback';
+    questionBox.appendChild(feedbackElement);
+
+    const navigationElement = document.createElement('p');
+    navigationElement.className = 'quiz-navigation';
+    navigationElement.style.display = 'none'; // Hide initially
+    navigationElement.textContent = '请继续作答下一题...';
+    questionBox.appendChild(navigationElement);
+
+    quizContainer.appendChild(questionBox);
+    quizContainer.scrollTop = quizContainer.scrollHeight; // Scroll to the new question
+  }
+
+  function handleAnswer(selectedAnswer, correctAnswer, explanation, questionBox) {
+    const feedbackElement = questionBox.querySelector("p.quiz-feedback");
+    const navigationElement = questionBox.querySelector("p.quiz-navigation");
+    const buttons = questionBox.querySelectorAll("button.quiz-option");
+
+    // Disable buttons after answering
+    buttons.forEach(button => button.disabled = true);
+
+    let correctSpeech = "答对了！真不错！为你鼓掌！";
+    let incorrectSpeech = "不对哦，回顾一下知识点，再试试！";
+
+    // 为第一题定制播报内容
+    if (currentQuestionIndex === 0) {
+        correctSpeech = "答对了！B选项正确描述了EPO的主要生理功能。";
+        // 对于第一题的错误回答，播报解析内容
+        incorrectSpeech = "不对哦。正确答案是B。解析：" + explanation;
+    }
+
+    // 检查答案 (注意：原始第一题答案是B，后续题目可能有不同类型答案)
+    let isCorrect = false;
+    if (Array.isArray(correctAnswer)) { // 处理多选题
+        // 注意：当前代码未完全支持多选逻辑判断，这里仅作示例
+        isCorrect = correctAnswer.includes(String(selectedAnswer)); 
+    } else { // 处理单选或判断题
+        isCorrect = String(selectedAnswer) === String(correctAnswer);
+    }
+
+    if (isCorrect) {
+      playCorrectAnswerSound(); // Play sound for correct answer
+      feedbackElement.textContent = "正确！👍 干得漂亮！" + explanation;
+      feedbackElement.className = "quiz-feedback correct";
+      
+      const nextAction = () => {
+          currentQuestionIndex++;
+          if (currentQuestionIndex < quizData.length) {
+              navigationElement.style.display = "block";
+              loadQuizQuestion(currentQuestionIndex); 
+          } else {
+              completeQuiz();
+          }
+      };
+
+      speakText(correctSpeech, nextAction);
+
+    } else {
+      feedbackElement.textContent = "错误！😥 再试一次吧！解析：" + explanation;
+      feedbackElement.className = "quiz-feedback incorrect";
+      speakText(incorrectSpeech);
+      // 允许重试
+      buttons.forEach(button => button.disabled = false);
+    }
+  }
+
+  function completeQuiz() {
+    quizCompleted = true;
+    quizContainer.innerHTML = '<h3 style="color: #00ff00;">所有题目已完成！</h3>';
+    quizCloseButton.style.display = 'block'; // Show close button
+    showCelebration();
+    // Pass a callback to ensure UI actions happen after speech completes
+    speakText('恭喜你！已完成全部课堂内容和习题！', () => {
+      // Optional: Any actions that should happen after completion speech ends
+      console.log("Quiz completion speech finished");
+    });
+  }
+
+  function showCelebration() {
+      celebrationEffect.style.display = 'flex';
+      // Play sound effect
+      const celebrationSound = new Audio('celebration_applause.mp3');
+      celebrationSound.play();
+      // Optional: Hide after a few seconds
+      setTimeout(() => {
+          celebrationEffect.style.display = 'none';
+      }, 4000); // Display for 4 seconds
+  }
+
+</script>
+
+</body>
+</html>
